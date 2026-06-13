@@ -1,0 +1,228 @@
+/* steph.photo — rebuild of the Wells (Squarespace 7.0) portfolio
+   All values extracted from the original compiled site.css and verified
+   against the cascade — see reference/rebuild-spec.md */
+
+/* Proxima Nova was served by Squarespace's Adobe license. Add your own
+   Adobe Fonts embed in <head> to restore it; until then this falls back
+   to Helvetica Neue, which is what Wells itself fell back to. */
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background-color: #fff;
+  color: #666;
+  font-family: proxima-nova, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.6em;
+  letter-spacing: .02em;
+}
+
+a { color: #666; text-decoration: none; }
+
+#canvas {
+  padding: 50px;
+  position: relative;
+  min-height: 100vh;
+  min-width: 900px;
+  max-width: 1233px; /* original #canvasWrapper cap */
+}
+
+/* ---- sidebar (Wells #headerWrapper: fixed, 180px wide at 50,50) ---- */
+
+#header {
+  position: fixed;
+  top: 50px;
+  left: 50px;
+  width: 180px;
+  z-index: 999;
+}
+
+#logo { margin-bottom: 30px; }
+
+#logo .site-title {
+  margin: 0;
+  font-size: 27px;
+  font-weight: 700;
+  letter-spacing: normal;
+  line-height: 1.2em;
+  display: inline-block;
+}
+
+#logo .site-title a { color: #000; }
+
+.logo-subtitle {
+  font-size: 12px;
+  color: #666;
+  font-weight: 400;
+  letter-spacing: .04em;
+  line-height: 1.4em;
+  margin-top: .5em;
+}
+
+#header nav + nav { margin-top: 20px; }
+#header nav a { display: block; padding: .2em 0; }
+
+#mainNavigation { font-size: 16px; }
+#mainNavigation a { color: #666; font-weight: 500; letter-spacing: 0; line-height: 1.6em; }
+
+#secondaryNavigation { font-size: 13px; }
+#secondaryNavigation a { color: #1f1f1f; letter-spacing: .02em; }
+
+#header nav a:hover,
+#header nav a.active-link { color: #1a0000; }
+
+/* ---- content area, offset past the sidebar ---- */
+
+#page {
+  margin-left: 250px;
+  position: relative;
+}
+
+/* text pages */
+.main-content { max-width: 640px; }
+.main-content img { max-width: 100%; height: auto; }
+.credits { text-align: center; font-size: 10px; }
+
+/* blog: right sidebar (blog-sidebar-right, #sidebarWrapper 200px) */
+body.blog-page .main-content { max-width: none; margin-right: 250px; }
+#blogSidebar { position: absolute; top: 0; right: 0; width: 200px; }
+#blogSidebar h1 { font-size: 16px; font-weight: 700; color: #222; margin: 0 0 .5em; }
+
+/* ---- gallery: slideshow fills the viewport, sidebar floats over it ----
+   Original mechanism: #galleryWrapper escapes the page flow;
+   #slideshowWrapper carves the image area with margins
+   (65px all round, 280px left = 50 canvas + 180 sidebar + 50 gap). */
+
+body.gallery-page { overflow: hidden; }
+
+#galleryWrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; }
+
+#slideshowWrapper {
+  position: relative;
+  height: 100%;
+  margin: 65px;
+  margin-left: 280px;
+}
+
+#slideshow { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+
+#slideshow .slide {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+#slideshow .slide.active { display: flex; }
+
+#slideshow .slide img {
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
+}
+
+/* slideshowWrapper has margins, so its 100% height overflows; contain it */
+#slideshowWrapper { height: calc(100% - 130px); }
+
+/* invisible click zones — verbatim Wells behavior */
+.overlay-controls { position: absolute; top: 0; height: 100%; z-index: 998; }
+.overlay-controls.left-control  { left: 0;   width: 40%; cursor: w-resize; }
+.overlay-controls.center-control{ left: 40%; width: 20%; cursor: n-resize; }
+.overlay-controls.right-control { left: 60%; width: 40%; cursor: e-resize; }
+
+/* controls sit under the sidebar, always visible (original .meta) */
+.meta {
+  position: fixed;
+  left: 50px;
+  bottom: 50px;
+  width: 180px;
+  z-index: 999;
+}
+
+.thumbnail-toggle {
+  margin-top: 15px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: #666;
+  cursor: pointer;
+}
+
+.gallery-controls {
+  padding-top: 15px;
+  font-size: 13px;
+  text-transform: uppercase;
+  font-weight: 400;
+  letter-spacing: .04em;
+  line-height: 1.2em;
+  color: #aaa;
+}
+
+.gallery-controls .control { cursor: pointer; color: #222; padding: 0 4px; }
+
+/* ---- gallery: thumbnail view (300px thumbs, JS masonry like the original) ---- */
+
+#thumbnails {
+  display: none;
+  position: relative;
+  margin: 10px;
+  padding-bottom: 50px;
+}
+
+.thumb {
+  position: absolute;
+  width: 300px;
+  cursor: pointer;
+  background-color: rgba(175,175,175,.1);
+  transition: top 50ms ease-out, left 50ms ease-out;
+}
+.thumb img { width: 100%; display: block; }
+.thumb img:hover { opacity: .9; }
+
+body.view-thumbs { overflow: auto; }
+body.view-thumbs #slideshowWrapper,
+body.view-thumbs .meta { display: none; }
+body.view-thumbs #thumbnails { display: block; }
+body.view-thumbs #galleryWrapper { position: static; }
+
+/* ---- mobile: original stacks slides vertically, no slideshow ---- */
+
+@media (max-width: 800px) {
+  #canvas { padding: 0; min-width: 0; }
+  #header { position: static; width: auto; padding: 20px; }
+  #header nav a { display: inline; margin-right: 0; padding: .2em .4em .2em 0; }
+  #page { margin-left: 0; padding: 20px; }
+  body.gallery-page { overflow: auto; }
+  body.gallery-page #page { padding: 0; }
+  #galleryWrapper { position: static; }
+  #slideshowWrapper { margin: 0; height: auto; }
+  #slideshow { position: static; }
+  #slideshow .slide {
+    position: static;
+    display: block;
+    height: auto;
+    margin-bottom: 20px;
+  }
+  #slideshow .slide img { width: 100%; max-height: none; }
+  .overlay-controls, .meta { display: none !important; }
+  body.blog-page .main-content { margin-right: 0; }
+  #blogSidebar { position: static; width: auto; margin-top: 40px; }
+}
+
+/* solid square button (small-button-style-solid, square) */
+.button {
+  display: inline-block;
+  background: #000;
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 12px;
+  letter-spacing: .04em;
+}
+.button:hover { background: #1a0000; color: #fff; }
+
+.entry-title { font-size: 18px; font-weight: normal; color: #222; line-height: 1.4em; margin-bottom: .25em; }
+.entry-title a { color: #222; }
+.entry-info { color: #aaa; font-size: 12px; margin-bottom: 2em; }

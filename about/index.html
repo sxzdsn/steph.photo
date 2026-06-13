@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>About — some-dilettante</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="../favicon.ico">
+<!-- Proxima Nova: paste your Adobe Fonts embed here -->
+<link rel="stylesheet" href="../css/site.css">
+</head>
+<body class="text-page">
+<div id="canvas">
+  <header id="header">
+    <div id="logo">
+      <h1 class="site-title"><a href="../index.html">some-dilettante</a></h1>
+      <div class="logo-subtitle">photographer</div>
+    </div>
+    <nav id="mainNavigation"><a href="../portraiture/">culinary</a><a href="../humannature/">else</a></nav>
+    <nav id="secondaryNavigation"><a href="../about/" class="active-link">about</a></nav>
+  </header>
+  <main id="page">
+    <div class="main-content">
+      <p>This website is an archive.</p>
+      <p>Some Dilettante is an alias and epithet of <strong>Stephanie Yin Zhao</strong>– an artist, photographer, and designer based in Chicago.</p>
+      <p>Let’s showcase your work in the best light.</p>
+      <p><a class="button" id="sayhello" href="#">Say Hello</a></p>
+      <p class="credits">My work can be seen in USA Today, Chicago Tribune, Eater Chicago, Modern Luxury, Crain’s, CS Magazine, Chicago Food Magazine, the Michelin Guide.</p>
+      <p><br><br><br></p>
+      <p><img src="../assets/about/yinzhao.jpg" alt="Stephanie Yin Zhao"></p>
+    </div>
+  </main>
+</div>
+<script>
+  // assemble the address at runtime so it never sits in the HTML for scrapers
+  (function () {
+    var a = document.getElementById('sayhello');
+    if (a) a.href = 'mailto:' + ['stephaniexzhao', 'gmail.com'].join('@');
+  })();
+</script>
+</body>
+</html>

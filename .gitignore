@@ -1,0 +1,10 @@
+# local working material — not part of the published site
+reference/
+manifest.tsv
+
+# machine-local launchers (no hardcoded paths, but not for the web)
+*.command
+*.app/
+
+# cruft
+.DS_Store
