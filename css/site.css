@@ -2,9 +2,10 @@
    All values extracted from the original compiled site.css and verified
    against the cascade — see reference/rebuild-spec.md */
 
-/* Proxima Nova was served by Squarespace's Adobe license. Add your own
-   Adobe Fonts embed in <head> to restore it; until then this falls back
-   to Helvetica Neue, which is what Wells itself fell back to. */
+/* Type: Inter — the standard free substitute for the original's Proxima Nova.
+   Loaded from Google Fonts. To self-host later: drop the woff2s in
+   assets/fonts/ and swap this @import for an @font-face block. */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
 
 * { box-sizing: border-box; }
 
@@ -12,7 +13,7 @@ body {
   margin: 0;
   background-color: #fff;
   color: #666;
-  font-family: proxima-nova, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 400;
   font-size: 14px;
   line-height: 1.6em;
@@ -26,8 +27,10 @@ a { color: #666; text-decoration: none; }
   position: relative;
   min-height: 100vh;
   min-width: 900px;
-  max-width: 1233px; /* original #canvasWrapper cap */
 }
+
+/* cap text pages for line readability; gallery pages fill the viewport like the demo */
+body.text-page #canvas { max-width: 1233px; }
 
 /* ---- sidebar (Wells #headerWrapper: fixed, 180px wide at 50,50) ---- */
 
@@ -41,30 +44,25 @@ a { color: #666; text-decoration: none; }
 
 #logo { margin-bottom: 30px; }
 
+/* name–role wordmark, matching steph.design: Inter 14/20, regular weight,
+   name #333, role #999, en-dash divider */
 #logo .site-title {
   margin: 0;
-  font-size: 27px;
-  font-weight: 700;
-  letter-spacing: normal;
-  line-height: 1.2em;
-  display: inline-block;
-}
-
-#logo .site-title a { color: #000; }
-
-.logo-subtitle {
-  font-size: 12px;
-  color: #666;
+  font-size: 14px;
   font-weight: 400;
-  letter-spacing: .04em;
-  line-height: 1.4em;
-  margin-top: .5em;
+  line-height: 20px;
+  letter-spacing: normal;
 }
+
+#logo .site-title a { color: #333; }
+#logo .wm-role { color: #999; }
+/* narrow sidebar: keep each phrase intact so it breaks between name and role, not mid-phrase */
+#logo .wm-name, #logo .wm-role { white-space: nowrap; }
 
 #header nav + nav { margin-top: 20px; }
 #header nav a { display: block; padding: .2em 0; }
 
-#mainNavigation { font-size: 16px; }
+#mainNavigation { font-size: 14px; } /* match the Steph Yin Zhao wordmark size */
 #mainNavigation a { color: #666; font-weight: 500; letter-spacing: 0; line-height: 1.6em; }
 
 #secondaryNavigation { font-size: 13px; }
@@ -162,23 +160,26 @@ body.gallery-page { overflow: hidden; }
   color: #aaa;
 }
 
-.gallery-controls .control { cursor: pointer; color: #222; padding: 0 4px; }
+/* no left padding on the first control, so PREV aligns flush-left with SHOW THUMBNAILS */
+.gallery-controls .control { cursor: pointer; color: #222; }
+.gallery-controls .control.next-slide { padding-left: 4px; }
 
 /* ---- gallery: thumbnail view (300px thumbs, JS masonry like the original) ---- */
 
+/* 3-column masonry: round-robin flex columns keep left-to-right reading order
+   (img 0,1,2 across the first row, 3,4,5 the next), fill the width, and handle
+   lazy-loaded variable-height images natively — no JS measuring. */
 #thumbnails {
   display: none;
-  position: relative;
   margin: 10px;
   padding-bottom: 50px;
 }
+.thumb-col { flex: 1; min-width: 0; }
 
 .thumb {
-  position: absolute;
-  width: 300px;
+  margin: 0 0 10px;
   cursor: pointer;
   background-color: rgba(175,175,175,.1);
-  transition: top 50ms ease-out, left 50ms ease-out;
 }
 .thumb img { width: 100%; display: block; }
 .thumb img:hover { opacity: .9; }
@@ -186,7 +187,7 @@ body.gallery-page { overflow: hidden; }
 body.view-thumbs { overflow: auto; }
 body.view-thumbs #slideshowWrapper,
 body.view-thumbs .meta { display: none; }
-body.view-thumbs #thumbnails { display: block; }
+body.view-thumbs #thumbnails { display: flex; gap: 10px; align-items: flex-start; }
 body.view-thumbs #galleryWrapper { position: static; }
 
 /* ---- mobile: original stacks slides vertically, no slideshow ---- */

@@ -1,14 +1,14 @@
 // Wells-style gallery: left half = prev, right half = next,
 // center = thumbnail grid, arrow keys, Esc back to slideshow.
 // Bottom-left controls (prev / next, show thumbnails) are always visible.
-// Thumbnails use a 350px-target JS masonry like the original.
+// Thumbnails are laid out with native CSS columns (see site.css) — no JS
+// measuring, so lazy-loaded images and variable heights just work.
 
 (function () {
   var slides = Array.prototype.slice.call(document.querySelectorAll('#slideshow .slide'));
   if (!slides.length) return;
 
   var thumbs = Array.prototype.slice.call(document.querySelectorAll('#thumbnails .thumb'));
-  var container = document.getElementById('thumbnails');
   var toggleLink = document.querySelector('.meta .thumbnail-toggle');
   var current = 0;
   var mobile = window.matchMedia('(max-width: 800px)');
@@ -31,39 +31,17 @@
   if (mobile.matches) hydrateAll();
   mobile.addEventListener('change', function (e) { if (e.matches) hydrateAll(); });
 
-  // masonry: ~250px column target → 3 columns at desktop widths,
-  // matching the original site and the Wells demo
-  var GAP = 10, TARGET = 250;
-  function layoutThumbs() {
-    if (!container || !thumbs.length) return;
-    var width = container.clientWidth;
-    var n = Math.max(1, Math.round(width / TARGET));
-    var colW = (width - (n - 1) * GAP) / n;
-    var heights = [];
-    for (var c = 0; c < n; c++) heights.push(0);
-    thumbs.forEach(function (t) {
-      t.style.width = colW + 'px';
-      var col = heights.indexOf(Math.min.apply(null, heights));
-      t.style.left = (col * (colW + GAP)) + 'px';
-      t.style.top = heights[col] + 'px';
-      heights[col] += t.offsetHeight + GAP;
-    });
-    container.style.height = Math.max.apply(null, heights) + 'px';
-  }
-
   function setView(thumbView) {
     document.body.classList.toggle('view-thumbs', thumbView);
     if (toggleLink) toggleLink.textContent = thumbView ? 'hide thumbnails' : 'show thumbnails';
-    if (thumbView) { window.scrollTo(0, 0); layoutThumbs(); }
+    if (thumbView) window.scrollTo(0, 0);
   }
 
-  thumbs.forEach(function (t, i) {
-    t.addEventListener('click', function () { setView(false); show(i); });
-    var img = t.querySelector('img');
-    if (img) img.addEventListener('load', layoutThumbs);
-  });
-  window.addEventListener('resize', function () {
-    if (document.body.classList.contains('view-thumbs')) layoutThumbs();
+  thumbs.forEach(function (t) {
+    t.addEventListener('click', function () {
+      setView(false);
+      show(parseInt(t.getAttribute('data-slide'), 10) || 0);
+    });
   });
 
   document.querySelector('.left-control').addEventListener('click', function () { show(current - 1); });
