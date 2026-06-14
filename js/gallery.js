@@ -31,8 +31,8 @@
   if (mobile.matches) hydrateAll();
   mobile.addEventListener('change', function (e) { if (e.matches) hydrateAll(); });
 
-  // masonry: thumbnailWidth 350px is a target — columns stretch to fill,
-  // like the original Squarespace layout engine
+  // masonry: ~250px column target → 3 columns at desktop widths,
+  // matching the original site and the Wells demo
   var GAP = 10, TARGET = 250;
   function layoutThumbs() {
     if (!container || !thumbs.length) return;
