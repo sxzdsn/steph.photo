@@ -33,7 +33,7 @@
 
   // masonry: thumbnailWidth 350px is a target — columns stretch to fill,
   // like the original Squarespace layout engine
-  var GAP = 10, TARGET = 350;
+  var GAP = 10, TARGET = 250;
   function layoutThumbs() {
     if (!container || !thumbs.length) return;
     var width = container.clientWidth;
