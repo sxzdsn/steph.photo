@@ -19,7 +19,7 @@ Hand-coded rebuild of my old Squarespace photography portfolio ("some-dilettante
 
 ## Preview
 `steph-photo` config in ~/.claude/launch.json serves **/tmp/steph-photo-preview** on port 4180 — macOS TCC blocks preview-spawned servers from reading ~/Desktop, so the site is rsynced there (same pattern as every other project). After edits:
-`rsync -a --delete --exclude reference --exclude manifest.tsv --exclude '*.command' --exclude '*.app' --exclude CLAUDE.md ~/Desktop/projects/steph.photo/ /tmp/steph-photo-preview/`
+`rsync -a --delete --exclude reference --exclude manifest.tsv --exclude '*.command' --exclude '*.app' --exclude CLAUDE.md ~/projects/steph.photo/ /tmp/steph-photo-preview/`
 
 ## Deploy
 Live on GitHub Pages from `main` root. Push to deploy — Pages rebuilds automatically. `.gitignore` keeps `reference/`, `manifest.tsv`, and launchers out of the repo. `CNAME` holds the custom domain.
