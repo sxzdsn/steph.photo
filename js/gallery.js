@@ -33,7 +33,7 @@
 
   function setView(thumbView) {
     document.body.classList.toggle('view-thumbs', thumbView);
-    if (toggleLink) toggleLink.textContent = thumbView ? 'hide thumbnails' : 'show thumbnails';
+    if (toggleLink) toggleLink.textContent = 'view all';
     if (thumbView) window.scrollTo(0, 0);
   }
 
