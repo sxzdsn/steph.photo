@@ -14,10 +14,14 @@ body {
   background-color: #fff;
   color: #666;
   font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "calt" 1;
   font-weight: 400;
   font-size: 14px;
   line-height: 1.6em;
-  letter-spacing: .02em;
+  letter-spacing: normal;
 }
 
 a { color: #666; text-decoration: none; }
