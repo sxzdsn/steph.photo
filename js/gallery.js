@@ -1,17 +1,22 @@
 // Wells-style gallery: left half = prev, right half = next,
 // center = thumbnail grid, arrow keys, Esc back to slideshow.
 // Bottom-left controls (prev / next, show thumbnails) are always visible.
-// Thumbnails are laid out with native CSS columns (see site.css) — no JS
-// measuring, so lazy-loaded images and variable heights just work.
+// Thumbnails are balanced into three columns so mixed photo ratios don't leave
+// a short column and a ragged bottom edge.
 
 (function () {
   var slides = Array.prototype.slice.call(document.querySelectorAll('#slideshow .slide'));
   if (!slides.length) return;
 
-  var thumbs = Array.prototype.slice.call(document.querySelectorAll('#thumbnails .thumb'));
+  var thumbGrid = document.querySelector('#thumbnails');
+  var thumbCols = Array.prototype.slice.call(document.querySelectorAll('#thumbnails .thumb-col'));
+  var thumbs = Array.prototype.slice.call(document.querySelectorAll('#thumbnails .thumb')).sort(function (a, b) {
+    return (parseInt(a.getAttribute('data-slide'), 10) || 0) - (parseInt(b.getAttribute('data-slide'), 10) || 0);
+  });
   var toggleLink = document.querySelector('.meta .thumbnail-toggle');
   var current = 0;
   var mobile = window.matchMedia('(max-width: 800px)');
+  var thumbsBalanced = false;
 
   function load(i) {
     if (i < 0 || i >= slides.length) return;
@@ -31,10 +36,50 @@
   if (mobile.matches) hydrateAll();
   mobile.addEventListener('change', function (e) { if (e.matches) hydrateAll(); });
 
+  function shortestColumn(heights) {
+    var shortest = 0;
+    for (var i = 1; i < heights.length; i++) {
+      if (heights[i] < heights[shortest]) shortest = i;
+    }
+    return shortest;
+  }
+
+  function balanceThumbs() {
+    if (!thumbGrid || thumbCols.length < 2 || mobile.matches) return;
+
+    var gap = parseFloat(getComputedStyle(thumbGrid).getPropertyValue('--thumb-gap')) || 10;
+    var heights = thumbCols.map(function () { return 0; });
+    var colWidth = thumbCols[0].getBoundingClientRect().width || 1;
+
+    thumbCols.forEach(function (col) { col.textContent = ''; });
+
+    thumbs.forEach(function (thumb) {
+      var img = thumb.querySelector('img');
+      var ratio = 1;
+      if (img && img.naturalWidth && img.naturalHeight) {
+        ratio = img.naturalHeight / img.naturalWidth;
+      }
+
+      var target = shortestColumn(heights);
+      thumbCols[target].appendChild(thumb);
+      heights[target] += (colWidth * ratio) + gap;
+    });
+  }
+
   function setView(thumbView) {
     document.body.classList.toggle('view-thumbs', thumbView);
     if (toggleLink) toggleLink.textContent = 'view all';
-    if (thumbView) window.scrollTo(0, 0);
+    if (thumbView) {
+      window.scrollTo(0, 0);
+      balanceThumbs();
+      if (!thumbsBalanced) {
+        thumbsBalanced = true;
+        thumbs.forEach(function (thumb) {
+          var img = thumb.querySelector('img');
+          if (img && !img.complete) img.addEventListener('load', balanceThumbs, { once: true });
+        });
+      }
+    }
   }
 
   thumbs.forEach(function (t) {
