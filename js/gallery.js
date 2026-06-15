@@ -68,7 +68,7 @@
 
   function setView(thumbView) {
     document.body.classList.toggle('view-thumbs', thumbView);
-    if (toggleLink) toggleLink.textContent = 'view all';
+    if (toggleLink) toggleLink.textContent = 'view gallery';
     if (thumbView) {
       window.scrollTo(0, 0);
       balanceThumbs();

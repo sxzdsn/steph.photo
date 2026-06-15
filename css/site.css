@@ -66,8 +66,8 @@ body.text-page #canvas { max-width: 1233px; }
 #header nav + nav { margin-top: 20px; }
 #header nav a { display: block; padding: .2em 0; }
 
-#mainNavigation { font-size: 12px; } /* styled like ABOUT */
-#mainNavigation a { color: #222; text-transform: uppercase; letter-spacing: .04em; line-height: 1.6em; }
+#mainNavigation { display: flex; flex-direction: column; gap: 6px; font-size: 12px; } /* styled like ABOUT */
+#mainNavigation a { color: #222; text-transform: uppercase; letter-spacing: .04em; line-height: 1.2em; padding: 0; }
 
 /* "about" lives in the bottom-left controls cluster, styled like PREV / NEXT */
 #secondaryNavigation {
@@ -79,7 +79,7 @@ body.text-page #canvas { max-width: 1233px; }
 }
 #secondaryNavigation a { color: #222; text-transform: uppercase; letter-spacing: .04em; line-height: 1.2em; }
 /* on gallery pages, lift "about" above the PREV/NEXT + SHOW THUMBNAILS controls, with breathing room */
-body.gallery-page #secondaryNavigation { bottom: 142px; }
+body.gallery-page #secondaryNavigation { bottom: 140px; }
 /* thumbnail view has no controls, so ABOUT drops back to the bottom instead of floating mid-air */
 body.view-thumbs #secondaryNavigation { bottom: 50px; }
 
@@ -153,13 +153,15 @@ body.gallery-page { overflow: hidden; }
 .meta {
   position: fixed;
   left: 42px;
-  bottom: 65px; /* bottom of VIEW ALL aligns with the image bottom (65px margin) */
+  bottom: 65px; /* bottom of VIEW GALLERY aligns with the image bottom (65px margin) */
   width: 180px;
   z-index: 999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .thumbnail-toggle {
-  margin-top: 15px;
   font-size: 12px;
   line-height: 1.2em;
   text-transform: uppercase;
@@ -169,7 +171,6 @@ body.gallery-page { overflow: hidden; }
 }
 
 .gallery-controls {
-  padding-top: 15px;
   font-size: 12px;
   text-transform: uppercase;
   font-weight: 400;
