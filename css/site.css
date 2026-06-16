@@ -66,8 +66,19 @@ body.text-page #canvas { max-width: 1233px; }
 #header nav + nav { margin-top: 20px; }
 #header nav a { display: block; padding: .2em 0; }
 
-#mainNavigation { display: flex; flex-direction: column; gap: 6px; font-size: 12px; } /* styled like ABOUT */
+#mainNavigation {
+  position: fixed;
+  left: 42px;
+  bottom: 80px; /* 30px above ABOUT (50px) — uniform rhythm */
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  gap: 10.8px; /* even rhythm: 30px baseline-to-baseline between CULINARY/ELSE/ABOUT (30 − 19.2px line box) */
+  font-size: 12px;
+}
 #mainNavigation a { color: #222; text-transform: uppercase; letter-spacing: .04em; line-height: 1.2em; padding: 0; }
+body.gallery-page #mainNavigation { bottom: 170px; } /* 30px above ABOUT (140px) on gallery pages */
+body.view-thumbs #mainNavigation { bottom: 80px; }
 
 /* "about" lives in the bottom-left controls cluster, styled like PREV / NEXT */
 #secondaryNavigation {
