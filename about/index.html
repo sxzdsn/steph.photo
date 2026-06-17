@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" href="../favicon.svg" type="image/svg+xml">
 <!-- Proxima Nova: paste your Adobe Fonts embed here -->
-<link rel="stylesheet" href="../css/site.css?v=5">
+<link rel="stylesheet" href="../css/site.css?v=6">
 </head>
 <body class="text-page">
 <div id="canvas">
@@ -16,32 +16,22 @@
     </div>
     <input type="checkbox" id="menu-toggle" class="menu-toggle" aria-label="Toggle menu">
     <label for="menu-toggle" id="mobileMenuLink">Menu</label>
-    <nav id="mobileNav">
+    <nav id="mobileNav" aria-label="Menu">
       <a href="../graphs-food/">culinary</a>
       <a href="../graphs-this-too/">else</a>
       <a href="../about/">about</a>
     </nav>
-    <nav id="mainNavigation"><a href="../graphs-food/">culinary</a><a href="../graphs-this-too/">else</a></nav>
-    <nav id="secondaryNavigation"><a href="../about/" class="active-link">about</a></nav>
+    <nav id="mainNavigation" aria-label="Galleries"><a href="../graphs-food/">culinary</a><a href="../graphs-this-too/">else</a></nav>
+    <nav id="secondaryNavigation" aria-label="Secondary"><a href="../about/" class="active-link">about</a></nav>
   </header>
   <main id="page">
     <div class="main-content">
-      <p>This website is an archive.</p>
-      <p>Some Dilettante is an alias and epithet of <strong>Stephanie Yin Zhao</strong>– an artist, photographer, and designer based in Chicago.</p>
-      <p>Let’s showcase your work in the best light.</p>
-      <p><a class="button" id="sayhello" href="#">Say Hello</a></p>
-      <p class="credits">My work can be seen in USA Today, Chicago Tribune, Eater Chicago, Modern Luxury, Crain’s, CS Magazine, Chicago Food Magazine, the Michelin Guide.</p>
-      <p><br><br><br></p>
-      <p><img src="../assets/about/yinzhao.jpg" alt="Stephanie Yin Zhao"></p>
+      <p>This website is an archive of the Chicago's fine dining scene from <span class="nowrap">2017–2021</span>.</p>
+      <p>These photos have been featured in the Michelin Guide, Eater, Time Out, Modern Luxury, CS Magazine, Chicago Food, and the Tribune.</p>
+      <p>Let’s showcase your work in the best light.<br>Reach out at <span class="redact" aria-hidden="true">xxxxxxxxxxxxxxx<span class="redact-blur"></span></span></p>
+      <div class="portrait"><img src="../assets/about/yinzhao.jpg" alt="Steph Yin Zhao"></div>
     </div>
   </main>
 </div>
-<script>
-  // assemble the address at runtime so it never sits in the HTML for scrapers
-  (function () {
-    var a = document.getElementById('sayhello');
-    if (a) a.href = 'mailto:' + ['stephaniexzhao', 'gmail.com'].join('@');
-  })();
-</script>
 </body>
 </html>

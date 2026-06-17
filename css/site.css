@@ -110,7 +110,18 @@ body.view-thumbs #secondaryNavigation { bottom: 50px; }
 /* text pages */
 .main-content { max-width: 640px; }
 .main-content img { max-width: 100%; height: auto; }
-.credits { text-align: center; font-size: 10px; }
+/* about: copy floats to the right of the page with generous left whitespace */
+body.text-page .main-content { max-width: 522px; margin-left: auto; } /* tuned: archive stays one line, press list breaks before "Modern" */
+.nowrap { white-space: nowrap; }
+/* across all desktop widths, vertically center the about content in the viewport */
+@media (min-width: 801px) {
+  body.text-page #page {
+    min-height: calc(100vh - 120px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
 
 /* blog: right sidebar (blog-sidebar-right, #sidebarWrapper 200px) */
 body.blog-page .main-content { max-width: none; margin-right: 250px; }
@@ -259,16 +270,32 @@ body.view-thumbs #galleryWrapper { position: static; }
   #blogSidebar { position: static; width: auto; margin-top: 40px; }
 }
 
-/* solid square button (small-button-style-solid, square) */
-.button {
-  display: inline-block;
-  background: #000;
-  color: #fff;
-  padding: 10px 20px;
-  font-size: 12px;
-  letter-spacing: .04em;
+/* contact intentionally obscured — a row of x's frosted by a blur overlay, no address behind it */
+.redact { position: relative; display: inline-block; margin-left: 26px; color: #000; user-select: none; }
+.redact-blur {
+  position: absolute;
+  top: 0; bottom: 0;
+  left: 50%;
+  transform: translateX(-50%); /* fixed-width bar centered on the x's */
+  width: 160px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
-.button:hover { background: #1a0000; color: #fff; }
+
+/* portrait on a square grey panel; darken blend drops the photo's white studio bg into the grey.
+   Subject fills the panel height and is bottom-anchored (body to the edge, grey above the head). */
+.portrait {
+  margin-top: 56px;
+  width: 300px;
+  max-width: 100%;
+  aspect-ratio: 1 / 1;
+  background: #efefef;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.portrait img { display: block; height: 100%; width: auto; mix-blend-mode: darken; }
 
 .entry-title { font-size: 18px; font-weight: normal; color: #222; line-height: 1.4em; margin-bottom: .25em; }
 .entry-title a { color: #222; }

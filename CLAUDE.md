@@ -14,7 +14,7 @@ Hand-coded rebuild of my old Squarespace photography portfolio ("some-dilettante
 
 ## Known gaps
 - Proxima Nova: needs my Adobe Fonts embed in each page `<head>` (placeholder comment there); currently falls back to Helvetica Neue
-- "Say Hello" on about is a JS-obfuscated mailto (email assembled at runtime, never in HTML source — keeps it off scrapers). Original was a Squarespace form lightbox.
+- About contact is a decorative CSS redaction bar — the string `xxxxxxxxxxxxxxx` under a `backdrop-filter: blur` overlay, no real email or mailto (intentional; original was a Squarespace form lightbox).
 - Hidden `/screener` page from the original was not rebuilt (was just a Google Form embed)
 
 ## Preview
