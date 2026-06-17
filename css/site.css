@@ -205,6 +205,27 @@ body.gallery-page { overflow: hidden; }
 .gallery-controls .control { cursor: pointer; color: #222; }
 .gallery-controls .control.next-slide { padding-left: 4px; }
 
+/* ---- gallery: tablet reflow (800–1280) — controls move to the four corners,
+   the image centers between them instead of sitting beside a left sidebar ---- */
+@media (min-width: 801px) and (max-width: 1280px) {
+  /* drop the 900px desktop floor so the canvas matches the viewport in this range */
+  body.gallery-page #canvas { min-width: 0; }
+  /* ABOUT to the top-right, level with the wordmark */
+  body.gallery-page #secondaryNavigation { top: 60px; right: 42px; left: auto; bottom: auto; }
+  /* CULINARY / ELSE to the bottom-left, side by side */
+  body.gallery-page #mainNavigation { left: 42px; bottom: 50px; top: auto; flex-direction: row; gap: 20px; }
+  /* VIEW GALLERY + PREV / NEXT to the bottom-right (row-reverse keeps VIEW GALLERY on the left) */
+  body.gallery-page .meta {
+    left: auto; right: 42px; bottom: 50px; width: auto;
+    flex-direction: row-reverse; gap: 20px; align-items: baseline;
+  }
+  /* image centered, clearing the corner clusters top and bottom */
+  body.gallery-page #slideshowWrapper { margin: 100px 65px 80px; height: calc(100% - 180px); }
+  /* thumbnail grid: no left sidebar in this range, so span the width and clear the corners */
+  body.gallery-page #page { margin-left: 0; }
+  body.view-thumbs #thumbnails { margin: 100px 42px 80px; }
+}
+
 /* ---- gallery: thumbnail view (300px thumbs, JS masonry like the original) ---- */
 
 /* 3-column masonry: round-robin flex columns keep left-to-right reading order
