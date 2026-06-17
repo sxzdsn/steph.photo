@@ -219,8 +219,13 @@ body.gallery-page { overflow: hidden; }
     left: auto; right: 42px; bottom: 50px; width: auto;
     flex-direction: row-reverse; gap: 20px; align-items: baseline;
   }
-  /* image centered, clearing the corner clusters top and bottom */
-  body.gallery-page #slideshowWrapper { margin: 100px 65px 80px; height: calc(100% - 180px); }
+  /* image area spans between the corner text clusters (42px = the text inset) */
+  body.gallery-page #slideshowWrapper { margin: 100px 42px 70px; height: calc(100% - 170px); }
+  /* landscape: left/right edges meet the text margins; portrait: 30px gap to the top/bottom text.
+     object-fit:contain is the safety net — if a shape can't honor its rule without overflowing,
+     it shrinks to fit (centered, never distorted) rather than overlapping the text. */
+  body.gallery-page #slideshow .slide.is-landscape img { width: 100%; height: auto; max-height: 100%; object-fit: contain; }
+  body.gallery-page #slideshow .slide.is-portrait  img { height: calc(100% - 60px); width: auto; max-width: 100%; object-fit: contain; }
   /* thumbnail grid: no left sidebar in this range, so span the width and clear the corners */
   body.gallery-page #page { margin-left: 0; }
   body.view-thumbs #thumbnails { margin: 100px 42px 80px; }

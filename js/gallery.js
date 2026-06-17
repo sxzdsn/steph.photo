@@ -18,6 +18,21 @@
   var mobile = window.matchMedia('(max-width: 800px)');
   var thumbsBalanced = false;
 
+  // tag each slide by aspect ratio so the tablet layout (800–1280) can size
+  // landscape images to the text width and portrait images to the height
+  function tagOrientation(img) {
+    if (!img || !img.naturalWidth) return;
+    var portrait = img.naturalHeight > img.naturalWidth;
+    img.parentNode.classList.toggle('is-portrait', portrait);
+    img.parentNode.classList.toggle('is-landscape', !portrait);
+  }
+  slides.forEach(function (s) {
+    var img = s.querySelector('img');
+    if (!img) return;
+    if (img.complete && img.naturalWidth) tagOrientation(img);
+    else img.addEventListener('load', function () { tagOrientation(img); });
+  });
+
   function load(i) {
     if (i < 0 || i >= slides.length) return;
     var img = slides[i].querySelector('img[data-src]');
