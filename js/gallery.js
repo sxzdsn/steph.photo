@@ -22,9 +22,15 @@
   // landscape images to the text width and portrait images to the height
   function tagOrientation(img) {
     if (!img || !img.naturalWidth) return;
-    var portrait = img.naturalHeight > img.naturalWidth;
-    img.parentNode.classList.toggle('is-portrait', portrait);
-    img.parentNode.classList.toggle('is-landscape', !portrait);
+    var slide = img.parentNode;
+    var r = img.naturalWidth / img.naturalHeight;
+    slide.classList.toggle('is-portrait', r < 1);
+    slide.classList.toggle('is-landscape', r >= 1);
+    // standardized display frames — the image fills a fixed-ratio box (cover) so the
+    // slideshow frame stays uniform across near-identical ratios. Non-destructive: the
+    // source file is never modified, only the visible crop. Buckets match the inventory:
+    slide.classList.toggle('fill-32', r >= 1.485 && r <= 1.51);  // near-3:2 → 3:2
+    slide.classList.toggle('fill-75', r >= 1.405 && r < 1.485);  // squarer landscape → 7:5
   }
   slides.forEach(function (s) {
     var img = s.querySelector('img');
