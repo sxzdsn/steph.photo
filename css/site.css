@@ -60,6 +60,7 @@ body.text-page #canvas { max-width: 1233px; }
 
 #logo .site-title a { color: #333; display: inline-flex; flex-wrap: wrap; column-gap: 6px; align-items: baseline; } /* 6px around the dash, matching steph.design's .link gap */
 #logo .wm-role { color: #999; }
+#logo .wm-dash { color: #e6e6e6; } /* light divider, matching steph.design's .nav-divider */
 /* narrow sidebar: keep each phrase intact so it breaks between name and role, not mid-phrase */
 #logo .wm-name, #logo .wm-role { white-space: nowrap; }
 
