@@ -78,7 +78,7 @@ body.text-page #canvas { max-width: 1233px; }
   font-size: 12px;
 }
 #mainNavigation a { color: #222; text-transform: uppercase; letter-spacing: .04em; line-height: 1.2em; padding: 0; }
-body.gallery-page #mainNavigation { bottom: 170px; } /* 30px above ABOUT (140px) on gallery pages */
+body.gallery-page #mainNavigation { bottom: 147px; } /* 30px above ABOUT (117px) on gallery pages */
 body.view-thumbs #mainNavigation { bottom: 80px; }
 
 /* "about" lives in the bottom-left controls cluster, styled like PREV / NEXT */
@@ -91,7 +91,7 @@ body.view-thumbs #mainNavigation { bottom: 80px; }
 }
 #secondaryNavigation a { color: #222; text-transform: uppercase; letter-spacing: .04em; line-height: 1.2em; }
 /* on gallery pages, lift "about" above the PREV/NEXT + SHOW THUMBNAILS controls, with breathing room */
-body.gallery-page #secondaryNavigation { bottom: 140px; }
+body.gallery-page #secondaryNavigation { bottom: 117px; }
 /* thumbnail view has no controls, so ABOUT drops back to the bottom instead of floating mid-air */
 body.view-thumbs #secondaryNavigation { bottom: 50px; }
 
@@ -141,7 +141,13 @@ body.gallery-page { overflow: hidden; }
 #slideshowWrapper {
   position: relative;
   height: 100%;
-  margin: 60px 65px 65px 272px; /* top 60 aligns with sidebar; left clears the 42px inset + sidebar */
+  margin: 20px 20px 20px 315px; /* 20px off the viewport top/right/bottom; left clears the 42px inset + 180px sidebar */
+  /* the frame the photo sits in: near-white panel, softly recessed */
+  border-radius: 6px;
+  background: #FCFCFC;
+  background: color(display-p3 0.99 0.99 0.99);
+  box-shadow: 0 0 4.2px 0 rgba(0, 0, 0, 0.05) inset, -1px -1px 18.3px 0 rgba(0, 0, 0, 0.03) inset;
+  box-shadow: 0 0 4.2px 0 color(display-p3 0 0 0 / 0.05) inset, -1px -1px 18.3px 0 color(display-p3 0 0 0 / 0.03) inset;
 }
 
 #slideshow { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
@@ -164,7 +170,7 @@ body.gallery-page { overflow: hidden; }
 }
 
 /* slideshowWrapper has margins, so its 100% height overflows; contain it */
-#slideshowWrapper { height: calc(100% - 125px); }
+#slideshowWrapper { height: calc(100% - 40px); }
 
 /* invisible click zones — verbatim Wells behavior */
 .overlay-controls { position: absolute; top: 0; height: 100%; z-index: 998; }
@@ -176,7 +182,7 @@ body.gallery-page { overflow: hidden; }
 .meta {
   position: fixed;
   left: 42px;
-  bottom: 65px; /* bottom of VIEW GALLERY aligns with the image bottom (65px margin) */
+  bottom: 42px; /* VIEW GALLERY sits 42px off the bottom, matching the 42px side inset */
   width: 180px;
   z-index: 999;
   display: flex;
@@ -225,28 +231,32 @@ body.gallery-page { overflow: hidden; }
      the bottom controls — even when it fills the band vertically.
      top 130 = wordmark bottom (~100) + 30; bottom 100 = controls top (~70) + 30 */
   body.gallery-page #slideshowWrapper { margin: 130px 42px 100px; height: calc(100% - 230px); }
-  /* landscape: left/right edges meet the text margins; portrait: fills the (already-inset) band.
-     object-fit:contain is the safety net — if a shape can't honor its rule without overflowing,
-     it shrinks to fit (centered, never distorted). */
-  body.gallery-page #slideshow .slide.is-landscape img { width: 100%; height: auto; max-height: 100%; object-fit: contain; }
-  body.gallery-page #slideshow .slide.is-portrait  img { height: 100%; width: auto; max-width: 100%; object-fit: contain; }
   /* thumbnail grid: no left sidebar in this range, so span the width and clear the corners */
   body.gallery-page #page { margin-left: 0; }
   body.view-thumbs #thumbnails { margin: 100px 42px 80px; }
 }
 
-/* ---- gallery: standardized display frames (non-destructive) ----
-   Tagged slides fill a fixed-ratio box via object-fit:cover, so the slideshow frame stays
-   uniform across near-identical ratios. The source files are never cropped — only the visible
-   area is clipped at display. Applies from the tablet breakpoint up (not the mobile stack).
-   Buckets are assigned in gallery.js: near-3:2 → 3:2, squarer landscape → 7:5. */
+/* ---- gallery: the photo inside the frame ----
+   The photo sits at 90% of the frame — landscape by width, portrait by height — so the
+   panel always shows around it. Sizing one axis and leaving the other auto keeps the img
+   box equal to the picture, so the 2px radius lands on the photo, not on a letterbox.
+   max-* is the safety net: an extreme ratio shrinks to fit rather than escaping the frame.
+   Also here: standardized display frames (non-destructive). Tagged slides fill a fixed-ratio
+   box via object-fit:cover, so the frame stays uniform across near-identical ratios — the
+   source files are never cropped, only the visible area is clipped at display. Buckets are
+   assigned in gallery.js: near-3:2 → 3:2, squarer landscape → 7:5.
+   Applies from the tablet breakpoint up (not the mobile stack). */
 @media (min-width: 801px) {
-  body.gallery-page #slideshow .slide.fill-32 img,
-  body.gallery-page #slideshow .slide.fill-75 img {
-    width: auto; height: auto; max-width: 100%; max-height: 100%; object-fit: cover;
-  }
-  body.gallery-page #slideshow .slide.fill-32 img { aspect-ratio: 3 / 2; }
-  body.gallery-page #slideshow .slide.fill-75 img { aspect-ratio: 7 / 5; }
+  body.gallery-page #slideshow .slide img { border-radius: 2px; }
+  /* orientation rule — also the fallback for the frame gallery.js hasn't measured yet */
+  body.gallery-page #slideshow .slide.is-landscape img { width: 90%; height: auto; max-height: 100%; object-fit: contain; }
+  body.gallery-page #slideshow .slide.is-portrait  img { height: 90%; width: auto; max-width: 100%; object-fit: contain; }
+  body.gallery-page #slideshow .slide.fill-32 img { aspect-ratio: 3 / 2; object-fit: cover; }
+  body.gallery-page #slideshow .slide.fill-75 img { aspect-ratio: 7 / 5; object-fit: cover; }
+  /* measured against the live frame ratio: whichever axis runs out first is the one
+     pinned to 90%, so there is margin on all four sides at every window size */
+  body.gallery-page #slideshow .slide.fit-width  img { width: 90%; height: auto; max-height: 100%; }
+  body.gallery-page #slideshow .slide.fit-height img { height: 90%; width: auto; max-width: 100%; }
 }
 
 /* ---- gallery: thumbnail view (300px thumbs, JS masonry like the original) ---- */
@@ -300,7 +310,8 @@ body.view-thumbs #galleryWrapper { position: static; }
   body.gallery-page { overflow: auto; }
   body.gallery-page #page { padding: 0; }
   #galleryWrapper { position: static; }
-  #slideshowWrapper { margin: 0; height: auto; }
+  /* stacked mobile view has no frame — full-bleed slides, as before */
+  #slideshowWrapper { margin: 0; height: auto; background: none; box-shadow: none; border-radius: 0; }
   #slideshow { position: static; }
   #slideshow .slide {
     position: static;

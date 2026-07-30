@@ -32,12 +32,41 @@
     slide.classList.toggle('fill-32', r >= 1.485 && r <= 1.51);  // near-3:2 → 3:2
     slide.classList.toggle('fill-75', r >= 1.405 && r < 1.485);  // squarer landscape → 7:5
   }
+
+  // the photo sits at 90% of the frame: 90% width when it is wider than the frame,
+  // 90% height when it is taller. Measuring against the live frame ratio (rather than
+  // orientation alone) keeps a margin on all four sides at any window size — a 7:5
+  // photo at 90% width would otherwise run to the top and bottom edges of a 3:2 frame.
+  var frame = document.getElementById('slideshowWrapper');
+
+  function displayRatio(slide, img) {
+    if (slide.classList.contains('fill-32')) return 1.5; // standardized buckets display
+    if (slide.classList.contains('fill-75')) return 1.4; // at their box ratio, not the file's
+    return img.naturalWidth / img.naturalHeight;
+  }
+
+  function fitSlides() {
+    if (!frame) return;
+    var box = frame.getBoundingClientRect();
+    if (!box.width || !box.height) return;
+    var frameRatio = box.width / box.height;
+    slides.forEach(function (s) {
+      var img = s.querySelector('img');
+      if (!img || !img.naturalWidth) return;
+      var wide = displayRatio(s, img) >= frameRatio;
+      s.classList.toggle('fit-width', wide);
+      s.classList.toggle('fit-height', !wide);
+    });
+  }
+
   slides.forEach(function (s) {
     var img = s.querySelector('img');
     if (!img) return;
     if (img.complete && img.naturalWidth) tagOrientation(img);
-    else img.addEventListener('load', function () { tagOrientation(img); });
+    else img.addEventListener('load', function () { tagOrientation(img); fitSlides(); });
   });
+  fitSlides();
+  window.addEventListener('resize', fitSlides);
 
   function load(i) {
     if (i < 0 || i >= slides.length) return;
