@@ -270,13 +270,23 @@ body.gallery-page { overflow: hidden; }
   margin: var(--thumb-gap);
   padding-bottom: 50px;
 }
-.thumb-col { flex: 1; min-width: 0; }
+.thumb-col {
+  flex: 1;
+  min-width: 0;
+}
+body.culinary-gallery .thumb-col {
+  transform: translate3d(0, var(--column-nudge, 0px), 0);
+  will-change: transform;
+}
+body.culinary-gallery.view-thumbs #canvas { padding-bottom: 42px; }
+body.culinary-gallery.view-thumbs #thumbnails { padding-bottom: 0; }
 
 .thumb {
   margin: 0 0 var(--thumb-gap);
   cursor: pointer;
   background-color: rgba(175,175,175,.1);
 }
+body.culinary-gallery .thumb-col .thumb:last-child { margin-bottom: 0; }
 .thumb img { width: 100%; display: block; }
 .thumb img:hover { opacity: .9; }
 

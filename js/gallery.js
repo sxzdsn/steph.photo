@@ -1,8 +1,8 @@
 // Wells-style gallery: left half = prev, right half = next,
 // center = thumbnail grid, arrow keys, Esc back to slideshow.
 // Bottom-left controls (prev / next, show thumbnails) are always visible.
-// Thumbnails are balanced into three columns so mixed photo ratios don't leave
-// a short column and a ragged bottom edge.
+// Thumbnails are balanced into three columns; on desktop the first two columns
+// drift down with scroll so all three photo edges meet at the bottom.
 
 (function () {
   var slides = Array.prototype.slice.call(document.querySelectorAll('#slideshow .slide'));
@@ -17,6 +17,9 @@
   var current = 0;
   var mobile = window.matchMedia('(max-width: 800px)');
   var thumbsBalanced = false;
+  var nudgeTargets = [0, 0, 0];
+  var nudgeMeasureFrame = 0;
+  var nudgeUpdateFrame = 0;
 
   // tag each slide by aspect ratio so the tablet layout (800–1280) can size
   // landscape images to the text width and portrait images to the height
@@ -94,6 +97,45 @@
     return shortest;
   }
 
+  function updateNudge() {
+    nudgeUpdateFrame = 0;
+    if (!document.body.classList.contains('view-thumbs') || mobile.matches) return;
+
+    var maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+    var progress = Math.max(0, Math.min(1, window.scrollY / maxScroll));
+    thumbCols.forEach(function (col, i) {
+      col.style.setProperty('--column-nudge', (nudgeTargets[i] * progress).toFixed(2) + 'px');
+    });
+  }
+
+  function scheduleNudgeUpdate() {
+    if (nudgeUpdateFrame) return;
+    nudgeUpdateFrame = window.requestAnimationFrame(updateNudge);
+  }
+
+  function measureNudge() {
+    nudgeMeasureFrame = 0;
+    if (!document.body.classList.contains('view-thumbs') || mobile.matches || thumbCols.length < 3) return;
+
+    var naturalBottoms = thumbCols.map(function (col) {
+      var images = col.querySelectorAll('.thumb img');
+      var last = images[images.length - 1];
+      if (!last) return 0;
+      var currentOffset = parseFloat(col.style.getPropertyValue('--column-nudge')) || 0;
+      return last.getBoundingClientRect().bottom - currentOffset;
+    });
+    var targetBottom = naturalBottoms[2];
+    nudgeTargets = naturalBottoms.map(function (bottom, i) {
+      return i < 2 ? Math.max(0, targetBottom - bottom) : 0;
+    });
+    scheduleNudgeUpdate();
+  }
+
+  function scheduleNudgeMeasure() {
+    if (nudgeMeasureFrame) return;
+    nudgeMeasureFrame = window.requestAnimationFrame(measureNudge);
+  }
+
   function balanceThumbs() {
     if (!thumbGrid || thumbCols.length < 2 || mobile.matches) return;
 
@@ -114,6 +156,7 @@
       thumbCols[target].appendChild(thumb);
       heights[target] += (colWidth * ratio) + gap;
     });
+    scheduleNudgeMeasure();
   }
 
   function setView(thumbView) {
@@ -138,6 +181,10 @@
       show(parseInt(t.getAttribute('data-slide'), 10) || 0);
     });
   });
+
+  window.addEventListener('scroll', scheduleNudgeUpdate, { passive: true });
+  window.addEventListener('resize', scheduleNudgeMeasure);
+  mobile.addEventListener('change', scheduleNudgeMeasure);
 
   document.querySelector('.left-control').addEventListener('click', function () { show(current - 1); });
   document.querySelector('.right-control').addEventListener('click', function () { show(current + 1); });
